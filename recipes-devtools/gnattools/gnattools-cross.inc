@@ -15,33 +15,16 @@ EXTRACONFFUNCS += "extract_stashed_builddir"
 do_configure[depends] += "${COMPILERDEP}"
 
 do_compile () {
-        #export AR_FOR_TARGET="${TARGET_SYS}-ar"
-        #export RANLIB_FOR_TARGET="${TARGET_SYS}-ranlib"
-        #export LD_FOR_TARGET="${TARGET_SYS}-ld"
-        #export NM_FOR_TARGET="${TARGET_SYS}-nm"
-        #export CC_FOR_TARGET="${CCACHE} ${TARGET_SYS}-gcc"
-        #export CFLAGS_FOR_TARGET="${TARGET_CFLAGS}"
-        #export CPPFLAGS_FOR_TARGET="${TARGET_CPPFLAGS}"
-        #export CXXFLAGS_FOR_TARGET="${TARGET_CXXFLAGS}"
-        #export LDFLAGS_FOR_TARGET="${TARGET_LDFLAGS}"
-        #export CC="${CC_FOR_TARGET} ${CFLAGS_FOR_TARGET}"
-
-	#cd ${B}/${TARGET_SYS}/libada/
-	#oe_runmake MULTIBUILDTOP=${B}/${TARGET_SYS}/libada/
 	cd ${B}/gcc
 	oe_runmake cross-gnattools
 }
 
 do_install () {
-        #export INSTALL='install'
-        #export INSTALL_DATA='install -m 644'
-        #export AR_FOR_TARGET="${TARGET_SYS}-ar"
         cd ${B}/gcc
-        sed -i -e '/Installation directories/,/UNSORTED/s/= .*recipe-sysroot-native/= /' Makefile
-        oe_runmake 'DESTDIR=${D}' gnat-install-tools
+        # sed -i -e '/Installation directories/,/UNSORTED/s/= .*recipe-sysroot-native/= /' Makefile
+        oe_runmake "DESTDIR=${D}" gnat-install-tools
         chown -R root:root ${D}
-        echo '${bindir}/${TARGET_SYS}'="${bindir}/${TARGET_SYS}" TARGET_PREFIX="${TARGET_PREFIX}"
-        #ls -1 ${bindir}/${TARGET_PREFIX}*
+        # echo '${bindir}/${TARGET_SYS}'="${bindir}/${TARGET_SYS}" TARGET_PREFIX="${TARGET_PREFIX}"
 }
 
 # avoid virtual/libc
