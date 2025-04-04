@@ -12,14 +12,12 @@
 LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = ""
 
-# No information for SRC_URI yet (only an external source tree was specified)
-FILESEXTRAPATHS:prepend := "${THISDIR}:"
-SRC_URI = "file://source/hello.adb"
-S = "${WORKDIR}/source"
+SRC_URI = "file://hello.adb"
 
-DEPENDS = "libada gnattools-cross"
+inherit gnatmake
 
-# NOTE: no Makefile found, unable to determine what needs to be done
+S = "${WORKDIR}/sources"
+UNPACKDIR = "${S}"
 
 do_configure () {
 	# Specify any needed configure commands here
@@ -28,9 +26,9 @@ do_configure () {
 
 do_compile () {
 	# Specify compilation commands here
-	${TARGET_PREFIX}gnatls -v --RTS=/home/max/yocto/poky/build/tmp/work/core2-64-poky-linux/hello/1.0/recipe-sysroot-native/usr/lib/gcc/x86_64-poky-linux/14.2.0
-	${TARGET_PREFIX}gnatmake -vh --RTS=/home/max/yocto/poky/build/tmp/work/core2-64-poky-linux/hello/1.0/recipe-sysroot-native/usr/lib/gcc/x86_64-poky-linux/14.2.0 -aI${S} hello.adb \
-         -largs --sysroot=/home/max/yocto/poky/build/tmp/work/core2-64-poky-linux/hello/1.0/recipe-sysroot
+	${TARGET_PREFIX}gnatls -v --RTS=${WORKDIR}/recipe-sysroot-native/usr/lib/gcc/x86_64-poky-linux/14.2.0
+	${TARGET_PREFIX}gnatmake -vh --RTS={$WORKDIR}/recipe-sysroot-native/usr/lib/gcc/x86_64-poky-linux/14.2.0 -aI${S} hello.adb \
+         -largs --sysroot=${WORKDIR}recipe-sysroot
 }
 
 do_install () {
